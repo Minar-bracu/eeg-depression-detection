@@ -8,6 +8,7 @@ for machine learning model input.
 import numpy as np
 from scipy import signal
 from scipy.signal import welch
+from scipy.integrate import trapz
 import pandas as pd
 from pathlib import Path
 
@@ -60,7 +61,7 @@ class EEGFeatureExtractor:
         band_powers = {}
         for band_name, (low_freq, high_freq) in self.bands.items():
             mask = (freqs >= low_freq) & (freqs <= high_freq)
-            band_powers[band_name] = np.trapz(psd[mask], freqs[mask])
+            band_powers[band_name] = trapz(psd[mask], freqs[mask])
         
         return band_powers, np.sum(list(band_powers.values()))
     

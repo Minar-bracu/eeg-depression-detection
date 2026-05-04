@@ -1,0 +1,118 @@
+{
+  "dataset": {
+    "subjects": 30,
+    "healthy": 15,
+    "depressed": 15,
+    "channels": 62,
+    "sampling_rate": 250
+  },
+  "features": {
+    "total": 1116,
+    "per_channel": 18,
+    "types": [
+      "band_power",
+      "relative_power",
+      "entropy",
+      "statistical",
+      "temporal"
+    ]
+  },
+  "models": {
+    "random_forest": {
+      "accuracy": 0.5,
+      "precision": 0.4333333333333333,
+      "recall": 0.4666666666666666,
+      "f1_score": 0.4419047619047619,
+      "roc_auc": 0.5333333333333333
+    },
+    "svm_rbf": {
+      "accuracy": 0.36666666666666664,
+      "precision": 0.27999999999999997,
+      "recall": 0.3333333333333333,
+      "f1_score": 0.2942857142857143,
+      "roc_auc": 0.2666666666666667
+    }
+  },
+  "top_features": [
+    {
+      "feature": "Ch39_theta_power",
+      "importance": 0.02403079892243979
+    },
+    {
+      "feature": "Ch10_delta_rel_power",
+      "importance": 0.02350287492337791
+    },
+    {
+      "feature": "Ch40_mean",
+      "importance": 0.020321957214258245
+    },
+    {
+      "feature": "Ch54_delta_power",
+      "importance": 0.01793453541260559
+    },
+    {
+      "feature": "Ch31_beta_power",
+      "importance": 0.01781346897603011
+    },
+    {
+      "feature": "Ch10_delta_power",
+      "importance": 0.01669834760827408
+    },
+    {
+      "feature": "Ch16_beta_power",
+      "importance": 0.01636059592581332
+    },
+    {
+      "feature": "Ch52_shannon_entropy",
+      "importance": 0.014467224296171664
+    },
+    {
+      "feature": "Ch16_alpha_rel_power",
+      "importance": 0.014281759906759905
+    },
+    {
+      "feature": "Ch34_alpha_rel_power",
+      "importance": 0.012224417737303827
+    },
+    {
+      "feature": "Ch48_theta_power",
+      "importance": 0.01180595638928972
+    },
+    {
+      "feature": "Ch59_gamma_power",
+      "importance": 0.011751798138283653
+    },
+    {
+      "feature": "Ch36_alpha_rel_power",
+      "importance": 0.011315789473684213
+    },
+    {
+      "feature": "Ch33_alpha_rel_power",
+      "importance": 0.01103285517105393
+    },
+    {
+      "feature": "Ch47_spectral_entropy",
+      "importance": 0.010918560606060604
+    },
+    {
+      "feature": "Ch22_theta_rel_power",
+      "importance": 0.010180569377541544
+    },
+    {
+      "feature": "Ch0_std",
+      "importance": 0.009889696217095597
+    },
+    {
+      "feature": "Ch49_spectral_entropy",
+      "importance": 0.009561795112781955
+    },
+    {
+      "feature": "Ch16_beta_rel_power",
+      "importance": 0.00939265289449113
+    },
+    {
+      "feature": "Ch36_alpha_power",
+      "importance": 0.0093609022556391
+    }
+  ]
+}

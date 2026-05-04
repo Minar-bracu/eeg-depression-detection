@@ -14,6 +14,7 @@ This project implements signal processing and machine learning techniques to ide
 ## Dataset
 
 **SEED-Depressed Dataset**
+
 - Source: [SEED Lab, Shanghai Jiao Tong University](https://bcmi.sjtu.edu.cn/seed/index.html)
 - Subjects: 23-30 with depression diagnosis
 - EEG Channels: 62 scalp electrodes
@@ -25,41 +26,57 @@ This project implements signal processing and machine learning techniques to ide
 
 ```
 eeg-depression-detection/
-├── README.md                    # This file
-├── METHODS.md                   # Technical methodology
+├── README.md                    # Project overview
+├── METHODS.md                   # Technical deep-dive
 ├── requirements.txt             # Python dependencies
+├── .gitignore                   # Git ignore rules
 ├── data/
-│   ├── raw/                     # Original EEG dataset (excluded from git)
-│   └── preprocessed/            # Cleaned signals (excluded from git)
+│   ├── raw/                     # Original EEG data (git ignored)
+│   ├── preprocessed/            # Cleaned signals (git ignored)
+│   ├── features.csv             # Extracted feature matrix
+│   └── scaler.pkl               # StandardScaler for features
 ├── src/
 │   ├── __init__.py
-│   ├── preprocessing.py         # EEG filtering, segmentation, normalization
-│   ├── feature_extraction.py    # Spectral, entropy, statistical features
-│   └── models.py                # Model training, evaluation, comparison
+│   ├── preprocessing.py         # EEG filtering & segmentation
+│   ├── feature_extraction.py    # 1,116 engineered features
+│   └── models.py                # RF & SVM training
 ├── notebooks/
-│   ├── 01_exploration.ipynb     # Data loading and EDA
-│   └── 02_analysis.ipynb        # Results visualization and interpretation
+│   ├── 01_exploration.ipynb     # Data loading & EDA
+│   ├── 02_preprocessing.ipynb    # Signal preprocessing pipeline
+│   ├── 03_feature_engineering.ipynb  # Feature extraction & analysis
+│   ├── 04_model_training.ipynb  # Model training & cross-validation
+│   └── 05_analysis.ipynb        # Results visualization & interpretation
 └── results/
-    ├── models/                  # Trained models (RF, SVM)
-    ├── plots/                   # Performance visualizations
-    └── metrics.json             # Quantitative results
+    ├── models/
+    │   ├── rf_model.pkl         # Trained Random Forest
+    │   ├── svm_model.pkl        # Trained SVM
+    │   ├── results.pkl          # Cross-validation results
+    │   └── metrics_summary.json  # Performance metrics
+    └── plots/
+        ├── confusion_matrices.png
+        ├── feature_importance.png
+        ├── model_comparison.png
+        └── feature_difference_preview.png
 ```
 
 ## Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/eeg-depression-detection.git
 cd eeg-depression-detection
 ```
 
 2. Create a virtual environment:
+
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
 3. Install dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -67,12 +84,15 @@ pip install -r requirements.txt
 ## Usage
 
 ### 1. Data Exploration
+
 ```bash
 jupyter notebook notebooks/01_exploration.ipynb
 ```
+
 Load the SEED-Depressed dataset and inspect signal characteristics, class distribution, and sample EEG traces.
 
 ### 2. Full Pipeline Execution
+
 ```bash
 python src/preprocessing.py
 python src/feature_extraction.py
@@ -83,18 +103,21 @@ jupyter notebook notebooks/02_analysis.ipynb
 ### 3. Individual Modules
 
 **Preprocessing:**
+
 ```python
 from src.preprocessing import preprocess_eeg
 cleaned_signals = preprocess_eeg(raw_eeg_data)
 ```
 
 **Feature Extraction:**
+
 ```python
 from src.feature_extraction import extract_eeg_features
 feature_matrix = extract_eeg_features(preprocessed_signals)
 ```
 
 **Model Training:**
+
 ```python
 from src.models import train_models
 results = train_models(feature_matrix, labels)
@@ -102,17 +125,44 @@ results = train_models(feature_matrix, labels)
 
 ## Results
 
-Expected Performance:
-- **Accuracy**: 85-92%
-- **Precision / Recall**: Balanced across classes
-- **ROC-AUC**: 0.88-0.95
+### Model Performance (5-Fold Cross-Validation)
 
-Key Findings:
-- Random Forest shows superior interpretability (feature importance ranking)
-- Most discriminative features: Alpha band power, approximate entropy, beta power
-- Model comparison provides robustness validation
+**Random Forest (Best Model):**
 
-Detailed results in `02_analysis.ipynb` and `results/metrics.json`.
+- **Accuracy**: 50.0% ± 10.5%
+- **Precision**: 43.3% ± 22.6%
+- **Recall**: 46.7% ± 26.7%
+- **F1-Score**: 44.2% ± 23.7%
+- **ROC-AUC**: 0.533 ± 0.152
+
+**SVM (RBF Kernel):**
+
+- **Accuracy**: 36.7% ± 12.5%
+- **Precision**: 28.0% ± 23.2%
+- **Recall**: 33.3% ± 29.8%
+- **F1-Score**: 29.4% ± 24.6%
+- **ROC-AUC**: 0.267 ± 0.259
+
+### Key Findings
+
+- **Best Model**: Random Forest (superior to SVM across all metrics)
+- **Top Discriminative Features**:
+  - Ch39_theta_power (importance: 0.0240)
+  - Ch10_delta_rel_power (importance: 0.0235)
+  - Ch40_mean (importance: 0.0203)
+- **Feature Categories**: Band powers, relative powers, and entropy measures show highest importance
+- **Signal Insights**: Theta and delta band activity appears most relevant for depression detection
+
+### Visual Results
+
+All analysis plots have been generated and saved to `results/plots/`:
+
+- Confusion matrices for both models
+- Feature importance ranking (top 20 features)
+- Model performance comparison
+- Classification reports
+
+Detailed results in [05_analysis.ipynb](notebooks/05_analysis.ipynb) and [results/models/metrics_summary.json](results/models/metrics_summary.json).
 
 ## Methods
 
@@ -121,17 +171,21 @@ For a detailed technical explanation of the signal processing pipeline, feature 
 ## Key Features Extracted
 
 **Spectral Domain** (10 features per channel):
+
 - Band Power: Delta, Theta, Alpha, Beta, Gamma
 - Relative Band Power: Each band / total power
 
 **Entropy & Complexity** (2 features per channel):
+
 - Approximate Entropy
 - Sample Entropy
 
 **Statistical** (4 features per channel):
+
 - Mean, Standard Deviation, Skewness, Kurtosis
 
 **Temporal** (2 features per channel):
+
 - Zero-Crossing Rate
 - Peak Count
 

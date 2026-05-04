@@ -39,7 +39,6 @@ coverage.xml
 
 # Jupyter Notebook
 .ipynb_checkpoints
-*.ipynb
 
 # pyenv
 .python-version
@@ -69,15 +68,12 @@ venv.bak/
 ehthumbs.db
 
 # Large data files
-data/raw/*.edf
-data/raw/*.mat
-data/raw/*.csv
-data/preprocessed/*.pkl
-data/preprocessed/*.npy
+data/raw/
+data/preprocessed/
 data/*.csv
+data/*.pkl
+data/*.npy
 
-# Model files
+# Model files (large, exclude binary)
 results/models/*.pkl
 results/models/*.joblib
-results/plots/*.png
-results/*.json
